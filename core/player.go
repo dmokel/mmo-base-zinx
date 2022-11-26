@@ -90,3 +90,20 @@ func (p *Player) BroadcastPos() {
 
 	p.SendMsg(200, protoMsg)
 }
+
+// Talk used to broadcast the chat content to all players in the game world
+func (p *Player) Talk(content string) {
+	msg := &pb.BroadCast{
+		Pid: p.Pid,
+		Tp:  1,
+		Data: &pb.BroadCast_Content{
+			Content: content,
+		},
+	}
+
+	players := WorldMgr.GetAllPlayers()
+
+	for _, p := range players {
+		p.SendMsg(200, msg)
+	}
+}
