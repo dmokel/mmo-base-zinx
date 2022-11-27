@@ -107,3 +107,47 @@ func (p *Player) Talk(content string) {
 		p.SendMsg(200, msg)
 	}
 }
+
+// SyncSurrounding used to broadcast the player position to all game players
+func (p *Player) SyncSurrounding() {
+	pids := WorldMgr.AoiMgr.GetPidsByPos(p.X, p.Z)
+	players := make([]*Player, 0, len(pids))
+
+	// broadcast the player position to all other players
+	positionMsg := &pb.BroadCast{
+		Pid: p.Pid,
+		Tp:  2,
+		Data: &pb.BroadCast_P{
+			P: &pb.Position{
+				X: p.X,
+				Y: p.Y,
+				Z: p.Z,
+				V: p.V,
+			},
+		},
+	}
+	for _, pid := range pids {
+		players = append(players, WorldMgr.GetPlayerByPid(int32(pid)))
+	}
+	for _, p := range players {
+		p.SendMsg(200, positionMsg)
+	}
+
+	// sync all the other players position to the player
+	playerMsg := make([]*pb.Player, 0, len(players))
+	for _, p := range players {
+		playerMsg = append(playerMsg, &pb.Player{
+			Pid: p.Pid,
+			P: &pb.Position{
+				X: p.X,
+				Y: p.Y,
+				Z: p.Z,
+				V: p.V,
+			},
+		})
+	}
+	syncPlayersMsg := &pb.SyncPlayers{
+		Ps: playerMsg,
+	}
+	p.SendMsg(202, syncPlayersMsg)
+}

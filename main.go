@@ -14,11 +14,14 @@ func OnConnAdd(conn ziface.IConnection) {
 	// create a player
 	player := core.NewPlayer(conn)
 
-	// send the message with msgID:1 to client
+	// send the message with msgID:1(palyer id) to client
 	player.SyncPid()
 
-	// send the message with msgID:200 to client
+	// send the message with msgID:200(player postion) to client
 	player.BroadcastPos()
+
+	// sync postion with the surrounding players
+	player.SyncSurrounding()
 
 	// add the palyer to world
 	core.WorldMgr.AddPlayer(player)

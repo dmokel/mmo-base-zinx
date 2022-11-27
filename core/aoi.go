@@ -121,7 +121,7 @@ func (am *AOIManager) GetGidByPos(x, y float32) int {
 	return idx + idy*am.CntsX
 }
 
-// GetPidsByPos is the function used to
+// GetPidsByPos is the function used to get surrounding pids around the position
 func (am *AOIManager) GetPidsByPos(x, y float32) (playerIDs []int) {
 	gid := am.GetGidByPos(x, y)
 
