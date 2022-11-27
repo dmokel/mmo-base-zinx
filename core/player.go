@@ -151,3 +151,41 @@ func (p *Player) SyncSurrounding() {
 	}
 	p.SendMsg(202, syncPlayersMsg)
 }
+
+// UpdatePosition used to update the player position and broadcast the position to all other players
+func (p *Player) UpdatePosition(x, y, z, v float32) {
+	p.X = x
+	p.Y = y
+	p.Z = z
+	p.V = v
+
+	protoMsg := &pb.BroadCast{
+		Pid: p.Pid,
+		Tp:  4,
+		Data: &pb.BroadCast_P{
+			P: &pb.Position{
+				X: p.X,
+				Y: p.Y,
+				Z: p.Z,
+				V: p.V,
+			},
+		},
+	}
+
+	players := p.GetSurroundingPlayers()
+	for _, p := range players {
+		p.SendMsg(200, protoMsg)
+	}
+}
+
+// GetSurroundingPlayers used to get surrounding players around the player
+func (p *Player) GetSurroundingPlayers() []*Player {
+	pids := WorldMgr.AoiMgr.GetPidsByPos(p.X, p.Z)
+
+	players := make([]*Player, 0, len(pids))
+	for _, pid := range pids {
+		players = append(players, WorldMgr.GetPlayerByPid(int32(pid)))
+	}
+
+	return players
+}

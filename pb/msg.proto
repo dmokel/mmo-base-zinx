@@ -15,8 +15,8 @@ message Position {
 
 message BroadCast {
   int32 Pid = 1;
-  int32 Tp = 2; // 1-世界聊天，2-玩家位置，3-移动之后的坐标信息更新
-  oneof Data {
+  int32 Tp = 2; // 1-世界聊天，2-玩家上线位置，3-动作，4-移动之后的坐标信息更新
+  oneof Data  {
     string Content = 3;
     Position P = 4;
     int32 ActionData = 5;

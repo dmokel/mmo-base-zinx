@@ -37,6 +37,7 @@ func main() {
 	srv.SetOnConnStart(OnConnAdd)
 
 	srv.AddRouter(2, &api.WorldChat{})
+	srv.AddRouter(3, &api.Move{})
 
 	srv.Serve()
 }

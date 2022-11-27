@@ -25,13 +25,13 @@ func (w *WorldManager) AddPlayer(p *Player) {
 	w.Players[p.Pid] = p
 	w.plock.Unlock()
 
-	w.AoiMgr.AddPlayerToGridByPos(int(p.Pid), p.X, p.Y)
+	w.AoiMgr.AddPlayerToGridByPos(int(p.Pid), p.X, p.Z)
 }
 
 // RemovePlayer used to delete a player from players
 func (w *WorldManager) RemovePlayer(pid int32) {
 	p := w.Players[pid]
-	w.AoiMgr.RemovePlayerFromGridByPos(int(p.Pid), p.X, p.Y)
+	w.AoiMgr.RemovePlayerFromGridByPos(int(p.Pid), p.X, p.Z)
 
 	w.plock.Lock()
 	delete(w.Players, pid)

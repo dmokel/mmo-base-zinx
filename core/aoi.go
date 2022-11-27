@@ -114,16 +114,16 @@ func (am *AOIManager) GetSurroundGridsByGid(gid int) (grids []*Grid) {
 }
 
 // GetGidByPos is the function used to
-func (am *AOIManager) GetGidByPos(x, y float32) int {
+func (am *AOIManager) GetGidByPos(x, z float32) int {
 	idx := (int(x) - am.MinX) / am.gridWidth()
-	idy := (int(x) - am.MinY) / am.gridLength()
+	idy := (int(z) - am.MinY) / am.gridLength()
 
 	return idx + idy*am.CntsX
 }
 
 // GetPidsByPos is the function used to get surrounding pids around the position
-func (am *AOIManager) GetPidsByPos(x, y float32) (playerIDs []int) {
-	gid := am.GetGidByPos(x, y)
+func (am *AOIManager) GetPidsByPos(x, z float32) (playerIDs []int) {
+	gid := am.GetGidByPos(x, z)
 
 	grids := am.GetSurroundGridsByGid(gid)
 
@@ -151,15 +151,15 @@ func (am *AOIManager) GetPidsByGid(gID int) (playerIDs []int) {
 }
 
 // AddPlayerToGridByPos ...
-func (am *AOIManager) AddPlayerToGridByPos(pID int, x, y float32) {
-	gID := am.GetGidByPos(x, y)
+func (am *AOIManager) AddPlayerToGridByPos(pID int, x, z float32) {
+	gID := am.GetGidByPos(x, z)
 	grid := am.grids[gID]
 	grid.AddPlayer(pID)
 }
 
 // RemovePlayerFromGridByPos ...
-func (am *AOIManager) RemovePlayerFromGridByPos(pID int, x, y float32) {
-	gID := am.GetGidByPos(x, y)
+func (am *AOIManager) RemovePlayerFromGridByPos(pID int, x, z float32) {
+	gID := am.GetGidByPos(x, z)
 	grid := am.grids[gID]
 	grid.DeletePlayer(pID)
 }
