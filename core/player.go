@@ -189,3 +189,17 @@ func (p *Player) GetSurroundingPlayers() []*Player {
 
 	return players
 }
+
+// Offline ...
+func (p *Player) Offline() {
+	players := p.GetSurroundingPlayers()
+	protoMsg := &pb.SyncPid{
+		Pid: p.Pid,
+	}
+	for _, p := range players {
+		p.SendMsg(201, protoMsg)
+	}
+
+	WorldMgr.AoiMgr.RemovePlayerFromGridByPos(int(p.Pid), p.X, p.Z)
+	WorldMgr.RemovePlayer(p.Pid)
+}

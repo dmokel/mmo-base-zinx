@@ -32,6 +32,16 @@ func OnConnAdd(conn ziface.IConnection) {
 	fmt.Printf("player %d is arrived\n", player.Pid)
 }
 
+// OnConnLost ...
+func OnConnLost(conn ziface.IConnection) {
+	pid, err := conn.GetProperty("pid")
+	if err != nil {
+	}
+
+	player := core.WorldMgr.GetPlayerByPid(pid.(int32))
+	player.Offline()
+}
+
 func main() {
 	srv := znet.NewServer()
 	srv.SetOnConnStart(OnConnAdd)
